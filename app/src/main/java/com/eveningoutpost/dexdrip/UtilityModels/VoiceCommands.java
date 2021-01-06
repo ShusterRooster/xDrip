@@ -54,7 +54,7 @@ public class VoiceCommands {
         } else if (allWords.contentEquals("remove transmitter bonding")) {
             Ob1G5CollectionService.unBondAndStop = true;
             JoH.static_toast_long("Attempt to unbond and shutdown collector");
-        } else if (allWords.contentEquals("clear transmitter queue")) {
+        } else if (allWords.contentEquals("clear transmitter queue") || allWords.contentEquals("clear transmitter Q")) {
             Ob1G5StateMachine.emptyQueue();
             JoH.static_toast_long("Clearing transmitter command queue");
         } else if (allWords.contentEquals("reset heart rate sync")) {
@@ -85,7 +85,7 @@ public class VoiceCommands {
             BloodTest.cleanup(-100000);
         } else if (allWords.contentEquals("delete all persistent store")) {
             SdcardImportExport.deletePersistentStore();
-        } else if (allWords.contentEquals("delete uploader queue")) {
+        } else if (allWords.contentEquals("delete uploader queue") || allWords.contentEquals("delete uploader Q")) {
             UploaderQueue.emptyQueue();
         } else if (allWords.contentEquals("clear battery warning")) {
             try {

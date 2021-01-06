@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NavigationDrawerFragment extends Fragment {
@@ -40,8 +41,9 @@ public class NavigationDrawerFragment extends Fragment {
     private String menu_name;
     public NavDrawerBuilder navDrawerBuilder;
     private int menu_position;
-    private List<String> menu_option_list;
-    private List<Intent> intent_list;
+    //private List<String> menu_option_list;
+    //private List<Intent> intent_list;
+    private List<NavDrawerItem> menu_items;
 
     public NavigationDrawerFragment() {
     }
@@ -79,16 +81,10 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         navDrawerBuilder = new NavDrawerBuilder(getActivity());
-        List<String> menu_option_list = navDrawerBuilder.nav_drawer_options;
-        // String[] menu_options = menu_option_list.toArray(new String[menu_option_list.size()]);
-        intent_list = navDrawerBuilder.nav_drawer_intents;
+        //menu_option_list = navDrawerBuilder.nav_drawer_options;
+        //intent_list = navDrawerBuilder.nav_drawer_intents;
 
-        // mDrawerListView.setAdapter(new ArrayAdapter<String>(
-        //         getActionBar().getThemedContext(),
-        //         android.R.layout.simple_list_item_activated_1,
-        //         android.R.id.text1,
-        //        menu_options
-        //        ));
+        menu_items = navDrawerBuilder.nav_drawer_options;
         return mDrawerListView;
     }
 
@@ -99,16 +95,18 @@ public class NavigationDrawerFragment extends Fragment {
     public void setUp(int fragmentId, DrawerLayout drawerLayout, String current_activity, Context context) {
         navDrawerBuilder = new NavDrawerBuilder(context);
         menu_name = current_activity;
-        menu_option_list = navDrawerBuilder.nav_drawer_options;
-        String[] menu_options = menu_option_list.toArray(new String[menu_option_list.size()]);
-        menu_position = menu_option_list.indexOf(menu_name);
-        intent_list = navDrawerBuilder.nav_drawer_intents;
+        Object[] menu_items_list = menu_items.toArray(new Object[menu_items.size()]);
+        menu_position = menu_items.indexOf(menu_name);
+
+        //menu_option_list = navDrawerBuilder.nav_drawer_options;
+        //String[] menu_options = menu_option_list.toArray(new String[menu_option_list.size()]);
+        //menu_position = menu_option_list.indexOf(menu_name);
+        //intent_list = navDrawerBuilder.nav_drawer_intents;
 
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
         mCurrentSelectedPosition = menu_position;
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        // mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -123,34 +121,42 @@ public class NavigationDrawerFragment extends Fragment {
             }
         }
 
-//        mDrawerListView = (ListView) inflater.inflate(
-//                R.layout.fragment_navigation_drawer, container, false);
-//        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                selectItem(position);
+//        try {
+//            mDrawerListView.setAdapter(new ArrayAdapter<String>(
+//                    actionBar.getThemedContext(),
+//                    android.R.layout.simple_list_item_activated_1,
+//                    android.R.id.text1,
+//                    menu_options
+//            ));
+//
+//        } catch (NullPointerException e) {
+//            try {
+//                mDrawerListView.setAdapter(new ArrayAdapter<String>(
+//                        getActivity().getActionBar().getThemedContext(),
+//                        android.R.layout.simple_list_item_activated_1,
+//                        android.R.id.text1,
+//                        menu_options
+//                ));
+//            } catch (NullPointerException ex) {
+//                Log.d("NavigationDrawerFrag", "Got second null pointer: " + ex.toString());
 //            }
-//        });
-
-//        navDrawerBuilder = new NavDrawerBuilder();
-//        List<String> menu_option_list = navDrawerBuilder.nav_drawer_options();
-//        String[] menu_options = menu_option_list.toArray(new String[menu_option_list.size()]);
+//        }
 
         try {
-            mDrawerListView.setAdapter(new ArrayAdapter<String>(
+            mDrawerListView.setAdapter(new ArrayAdapter<Object>(
                     actionBar.getThemedContext(),
                     android.R.layout.simple_list_item_activated_1,
                     android.R.id.text1,
-                    menu_options
+                    menu_items_list
             ));
 
         } catch (NullPointerException e) {
             try {
-                mDrawerListView.setAdapter(new ArrayAdapter<String>(
+                mDrawerListView.setAdapter(new ArrayAdapter<Object>(
                         getActivity().getActionBar().getThemedContext(),
                         android.R.layout.simple_list_item_activated_1,
                         android.R.id.text1,
-                        menu_options
+                        menu_items_list
                 ));
             } catch (NullPointerException ex) {
                 Log.d("NavigationDrawerFrag", "Got second null pointer: " + ex.toString());
@@ -265,13 +271,6 @@ public class NavigationDrawerFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-/*    private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
-    }*/
-
     private ActionBar getActionBar() {
         try {
             return ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -286,11 +285,66 @@ public class NavigationDrawerFragment extends Fragment {
 
     public void swapContext(int position) {
         if (position != menu_position) {
-            Intent[] intent_array = intent_list.toArray(new Intent[intent_list.size()]);
-            startActivity(intent_array[position]);
+            //Intent[] intent_array = intent_list.toArray(new Intent[intent_list.size()]);
+            List<NavDrawerItem> test = new ArrayList<NavDrawerItem>();
+            ArrayList<Intent> intent_list = new ArrayList<>();
+
+            for(NavDrawerItem item : test){
+                intent_list.add(item.intent);
+            }
+
+            startActivity(intent_list.get(position));
             if (menu_position != 0) {
                 getActivity().finish();
             }
+        }
+    }
+
+    public static class NavDrawerItem {
+        public String name;
+        public Intent intent;
+        public Integer drawable;
+
+        NavDrawerItem(String name, Intent intent) {
+            this.name = name;
+            this.intent = intent;
+        }
+
+        NavDrawerItem(String name, Intent intent, Integer drawable) {
+            this.name = name;
+            this.intent = intent;
+            this.drawable = drawable;
+        }
+
+        public String getName(){
+            return this.name;
+        }
+
+        public Intent getIntent(){
+            return this.intent;
+        }
+
+        public Integer getDrawable(){
+            return this.drawable;
+        }
+        public List<Intent> getAllIntents(){
+            List<NavDrawerItem> test = new ArrayList<NavDrawerItem>();
+            List<Intent> intent_list = new ArrayList<>();
+
+            for(NavDrawerItem item : test){
+                intent_list.add(item.intent);
+            }
+            return intent_list;
+        }
+
+        public List<String> getAllStrings(){
+            List<NavDrawerItem> test = new ArrayList<NavDrawerItem>();
+            List<String> string_list = new ArrayList<>();
+
+            for(NavDrawerItem item : test){
+                string_list.add(item.name);
+            }
+            return string_list;
         }
     }
 }

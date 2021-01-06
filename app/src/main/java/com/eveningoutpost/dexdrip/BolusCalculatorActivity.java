@@ -117,7 +117,7 @@ public class BolusCalculatorActivity extends AppCompatActivity {
         if (Pref.getString("units", "mgdl").equals("mgdl")) {
             bgUnitText.setText("mg/dL");
             plusMinusDifference = 1;
-            maxBloodGlucose = 400;
+            maxBloodGlucose = 999;
 
             if(Sensor.isActive()){
                 bloodGlucoseEditText.setText(String.valueOf(mgdl_value));

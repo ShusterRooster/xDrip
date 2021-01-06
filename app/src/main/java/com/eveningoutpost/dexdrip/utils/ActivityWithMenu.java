@@ -20,6 +20,7 @@ public abstract class ActivityWithMenu extends BaseAppCompatActivity implements 
     private int menu_position;
     private String menu_name;
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private NavigationDrawerFragment.NavDrawerItem NavDrawerItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,8 @@ public abstract class ActivityWithMenu extends BaseAppCompatActivity implements 
         }
         menu_name = getMenuName();
         NavDrawerBuilder navDrawerBuilder = new NavDrawerBuilder(getApplicationContext());
-        List<String> menu_option_list = navDrawerBuilder.nav_drawer_options;
+        //List<String> menu_option_list = navDrawerBuilder.nav_drawer_options;
+        List<String> menu_option_list = NavDrawerItem.getAllStrings();
         menu_position = menu_option_list.indexOf(menu_name);
 
       mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);

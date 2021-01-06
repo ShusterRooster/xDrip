@@ -1,6 +1,5 @@
 package com.eveningoutpost.dexdrip.utils;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -30,7 +29,7 @@ public abstract class ListActivityWithMenu extends BaseListActivity implements N
         super.onResume();
         menu_name = getMenuName();
         NavDrawerBuilder  navDrawerBuilder = new NavDrawerBuilder(getApplicationContext());
-        List<String> menu_option_list = navDrawerBuilder.nav_drawer_options;
+        List<String> menu_option_list = navDrawerBuilder.nav_drawer_names;
         menu_position = menu_option_list.indexOf(menu_name);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -40,7 +39,7 @@ public abstract class ListActivityWithMenu extends BaseListActivity implements N
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         NavDrawerBuilder navDrawerBuilder = new NavDrawerBuilder(getApplicationContext());
-        List<String> menu_option_list = navDrawerBuilder.nav_drawer_options;
+        List<String> menu_option_list = navDrawerBuilder.nav_drawer_names;
         List<Intent> intent_list = navDrawerBuilder.nav_drawer_intents;
         if (position != menu_position) {
             startActivity(intent_list.get(position));
